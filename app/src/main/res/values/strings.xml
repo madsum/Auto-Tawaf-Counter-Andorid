@@ -3,4 +3,18 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <!-- Home Fragment Dialog Strings -->
+    <string name="dialog_alignment_title">Tawaf Preparation</string>
+    <string name="dialog_alignment_message">Are you aligned with Hajar al-Aswad?</string>
+    <string name="button_yes_start_tawaf">Yes, Start Tawaf</string>
+    <string name="button_not_yet">Not Yet</string>
+
+    <!-- Not Aligned Dialog -->
+    <string name="dialog_not_aligned_title">Alignment Required</string>
+    <string name="dialog_not_aligned_message">Please align with Hajar al-Aswad and press \'Yes\' to begin automatic counting.</string>
+    <string name="button_ok">OK</string>
+
+    <!-- Tawaf Activity -->
+    <string name="tawaf_counter_title">Tawaf Counter</string>
 </resources>
