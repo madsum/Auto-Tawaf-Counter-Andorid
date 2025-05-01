@@ -76,7 +76,7 @@ public class TawafActivity extends AppCompatActivity {
 
         @Override
         public void onMoveEnd(@NonNull MoveGestureDetector moveGestureDetector) {
-
+            // No-op
         }
     };
 
@@ -93,29 +93,32 @@ public class TawafActivity extends AppCompatActivity {
         }
 
         floatingActionButton.hide();
-        mapView.getMapboxMap().loadStyleUri(Style.SATELLITE, new Style.OnStyleLoaded() {
-            @Override
-            public void onStyleLoaded(@NonNull Style style) {
-                mapView.getMapboxMap().setCamera(new CameraOptions.Builder().zoom(20.0).build());
-                LocationComponentPlugin locationComponentPlugin = getLocationComponent(mapView);
-                locationComponentPlugin.setEnabled(true);
-                LocationPuck2D locationPuck2D = new LocationPuck2D();
-                locationPuck2D.setBearingImage(ImageHolder.from(R.drawable.baseline_location_on_24));
-                locationComponentPlugin.setLocationPuck(locationPuck2D);
-                locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener);
-                locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener);
-                getGestures(mapView).addOnMoveListener(onMoveListener);
 
-                floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener);
-                        locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener);
-                        getGestures(mapView).addOnMoveListener(onMoveListener);
-                        floatingActionButton.hide();
-                    }
-                });
-            }
-        });
+        mapView.getMapboxMap().loadStyle(
+                Style.SATELLITE,
+                style -> {
+                    mapView.getMapboxMap().setCamera(new CameraOptions.Builder().zoom(20.0).build());
+                    LocationComponentPlugin locationComponentPlugin = getLocationComponent(mapView);
+                    locationComponentPlugin.setEnabled(true);
+
+                    LocationPuck2D locationPuck2D = new LocationPuck2D();
+                    locationPuck2D.setBearingImage(ImageHolder.from(R.drawable.baseline_location_on_24));
+                    locationComponentPlugin.setLocationPuck(locationPuck2D);
+
+                    locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener);
+                    locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener);
+                    getGestures(mapView).addOnMoveListener(onMoveListener);
+
+                    floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener);
+                            locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener);
+                            getGestures(mapView).addOnMoveListener(onMoveListener);
+                            floatingActionButton.hide();
+                        }
+                    });
+                }
+        );
     }
 }
