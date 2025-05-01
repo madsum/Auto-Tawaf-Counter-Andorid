@@ -9,6 +9,10 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        // Mapbox Maven repository
+        maven {
+            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+        }
     }
 }
 dependencyResolutionManagement {
@@ -16,6 +20,15 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+            // Credentials for downloading the Mapbox SDK
+            credentials {
+                // In settings.gradle.kts, use settings instead of project
+                username = "mapbox"
+                password = settings.extra.properties["MAPBOX_DOWNLOADS_TOKEN"] as String? ?: ""
+            }
+        }
     }
 }
 
