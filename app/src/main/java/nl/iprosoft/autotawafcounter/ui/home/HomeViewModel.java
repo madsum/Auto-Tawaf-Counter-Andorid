@@ -20,10 +20,6 @@ public class HomeViewModel extends ViewModel {
         navigationState.setValue(STATE_INITIAL);
     }
 
-/*    public LiveData<String> getText() {
-        return mText;
-    }*/
-
     // Method to get the current navigation state
     public LiveData<Integer> getNavigationState() {
         return navigationState;

@@ -1,6 +1,7 @@
 <resources>
+    <string name="mapbox_token">@string/mapbox_access_token</string>
     <string name="app_name">Auto Tawaf Counter</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">@string/dialog_alignment_title</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
