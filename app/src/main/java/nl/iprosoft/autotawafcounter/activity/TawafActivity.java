@@ -35,13 +35,11 @@ public class TawafActivity extends AppCompatActivity {
 
     private final double KABA_LONGITUDE = 39.8262;
     private final double KABA_LATITUE = 21.4225;
-
-    private double zoomLevel = 17.50;
+    private final double zoomLevel = 17.50;
     private MapView mapView;
     private FloatingActionButton floatingActionButton;
     private FloatingActionButton zoomIn;
     private FloatingActionButton zoomOut;
-    private boolean isUserRequestedFocus = true;
 
     private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
         @Override
@@ -112,13 +110,6 @@ public class TawafActivity extends AppCompatActivity {
         mapView.getMapboxMap().loadStyle(
                 Style.SATELLITE, style -> {
                     setKabaLocation();
-/*
-                    Point targetPoint = Point.fromLngLat(KABA_LONGITUDE, KABA_LATITUE);
-                    mapView.getMapboxMap().setCamera(new CameraOptions.Builder()
-                            .center(targetPoint)
-                            .zoom(zoomLevel)
-                            .build());
-*/
 
                     LocationComponentPlugin locationComponentPlugin = getLocationComponent(mapView);
                     locationComponentPlugin.setEnabled(true);
