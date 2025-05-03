@@ -6,7 +6,6 @@ import static com.mapbox.maps.plugin.locationcomponent.LocationComponentUtils.ge
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -33,8 +32,16 @@ import nl.iprosoft.autotawafcounter.R;
 
 public class TawafActivity extends AppCompatActivity {
 
+
+    private final double KABA_LONGITUDE = 39.8262;
+    private final double KABA_LATITUE = 21.4225;
+
+    private double zoomLevel = 17.50;
     private MapView mapView;
-    FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton;
+    private FloatingActionButton zoomIn;
+    private FloatingActionButton zoomOut;
+    private boolean isUserRequestedFocus = true;
 
     private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
         @Override
@@ -55,8 +62,14 @@ public class TawafActivity extends AppCompatActivity {
     private final OnIndicatorPositionChangedListener onIndicatorPositionChangedListener = new OnIndicatorPositionChangedListener() {
         @Override
         public void onIndicatorPositionChanged(@NonNull Point point) {
-            mapView.getMapboxMap().setCamera(new CameraOptions.Builder().center(point).zoom(20.0).build());
-            getGestures(mapView).setFocalPoint(mapView.getMapboxMap().pixelForCoordinate(point));
+            // set current location Kaba.
+            double currentZoom = mapView.getMapboxMap().getCameraState().getZoom();
+            Point kabaPoint = Point.fromLngLat(KABA_LONGITUDE, KABA_LATITUE);
+            mapView.getMapboxMap().setCamera(new CameraOptions.Builder()
+                    .center(kabaPoint)
+                    .zoom(currentZoom)
+                    .build());
+            getGestures(mapView).setFocalPoint(mapView.getMapboxMap().pixelForCoordinate(kabaPoint));
         }
     };
 
@@ -87,17 +100,26 @@ public class TawafActivity extends AppCompatActivity {
 
         mapView = findViewById(R.id.mapView);
         floatingActionButton = findViewById(R.id.focusLocation);
+        zoomIn = findViewById(R.id.zoomIn);
+        zoomOut = findViewById(R.id.zoomOut);
 
         if (ActivityCompat.checkSelfPermission(TawafActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             activityResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         }
 
-        floatingActionButton.hide();
+        floatingActionButton.show();
 
         mapView.getMapboxMap().loadStyle(
-                Style.SATELLITE,
-                style -> {
-                    mapView.getMapboxMap().setCamera(new CameraOptions.Builder().zoom(20.0).build());
+                Style.SATELLITE, style -> {
+                    setKabaLocation();
+/*
+                    Point targetPoint = Point.fromLngLat(KABA_LONGITUDE, KABA_LATITUE);
+                    mapView.getMapboxMap().setCamera(new CameraOptions.Builder()
+                            .center(targetPoint)
+                            .zoom(zoomLevel)
+                            .build());
+*/
+
                     LocationComponentPlugin locationComponentPlugin = getLocationComponent(mapView);
                     locationComponentPlugin.setEnabled(true);
 
@@ -109,16 +131,33 @@ public class TawafActivity extends AppCompatActivity {
                     locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener);
                     getGestures(mapView).addOnMoveListener(onMoveListener);
 
-                    floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener);
-                            locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener);
-                            getGestures(mapView).addOnMoveListener(onMoveListener);
-                            floatingActionButton.hide();
-                        }
+                    floatingActionButton.setOnClickListener(view -> {
+                        locationComponentPlugin.addOnIndicatorBearingChangedListener(onIndicatorBearingChangedListener);
+                        locationComponentPlugin.addOnIndicatorPositionChangedListener(onIndicatorPositionChangedListener);
+                        getGestures(mapView).addOnMoveListener(onMoveListener);
+                        setKabaLocation();
                     });
-                }
-        );
+                });
+
+        zoomIn.setOnClickListener(v -> {
+            double currentZoom = mapView.getMapboxMap().getCameraState().getZoom();
+            mapView.getMapboxMap().setCamera(new CameraOptions.Builder()
+                    .zoom(currentZoom + 1.0)
+                    .build());
+        });
+
+        zoomOut.setOnClickListener(v -> {
+            double currentZoom = mapView.getMapboxMap().getCameraState().getZoom();
+            mapView.getMapboxMap().setCamera(new CameraOptions.Builder()
+                    .zoom(currentZoom - 1.0)
+                    .build());
+        });
+    }
+    private void setKabaLocation(){
+        Point targetPoint = Point.fromLngLat(KABA_LONGITUDE, KABA_LATITUE);
+        mapView.getMapboxMap().setCamera(new CameraOptions.Builder()
+                .center(targetPoint)
+                .zoom(zoomLevel)
+                .build());
     }
 }
