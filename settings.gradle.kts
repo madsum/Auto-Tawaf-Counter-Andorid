@@ -1,4 +1,4 @@
-pluginManagement {
+/*pluginManagement {
     repositories {
         google {
             content {
@@ -9,12 +9,24 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
-        // Mapbox Maven repository
+    }
+}*/
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
         maven {
             url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+            credentials {
+                username = "mapbox"
+                password = providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN").get()
+            }
         }
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -22,11 +34,13 @@ dependencyResolutionManagement {
         mavenCentral()
         maven {
             url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
-            // Credentials for downloading the Mapbox SDK
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
             credentials {
-                // In settings.gradle.kts, use settings instead of project
                 username = "mapbox"
-                password = settings.extra.properties["MAPBOX_DOWNLOADS_TOKEN"] as String? ?: ""
+                // Access token from gradle.properties (make sure it's defined there)
+                password = providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN").getOrElse("")
             }
         }
     }

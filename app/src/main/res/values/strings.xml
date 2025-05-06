@@ -7,7 +7,7 @@
 
     <!-- Home Fragment Dialog Strings -->
     <string name="dialog_alignment_title">Tawaf Preparation</string>
-    <string name="dialog_alignment_message">Are you aligned with Hajar al-Aswad?</string>
+    <string name="dialog_alignment_message">Are you aligned with Hajar Al-Aswad?</string>
     <string name="button_yes_start_tawaf">Yes, Start Tawaf</string>
     <string name="button_not_yet">Not Yet</string>
 

@@ -31,6 +31,10 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
 }
 
@@ -46,8 +50,13 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.activity)
-    // Add Mapbox dependencies
-    implementation("com.mapbox.maps:android:11.11.0") // Use the latest version
+    // Mapbox Core
+    implementation("com.mapbox.maps:android:11.11.0")
+    // Mapbox Annotation Plugin
+    implementation("com.mapbox.plugin:maps-animation:11.11.0")
+    implementation("com.mapbox.extension:maps-androidauto:11.11.0")
+    implementation(libs.animation.graphics.android)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

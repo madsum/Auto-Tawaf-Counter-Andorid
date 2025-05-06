@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".activity.TawafActivity">
 
+    <TextView
+        android:id="@+id/tawafCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1/7 Tawaf"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:textColor="@android:color/white" />
+
+
     <com.mapbox.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
@@ -41,8 +54,8 @@
             android:id="@+id/focusLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/baseline_my_location_24"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="0dp"
+            android:src="@drawable/kaaba" />
     </LinearLayout>
 
 </RelativeLayout>
